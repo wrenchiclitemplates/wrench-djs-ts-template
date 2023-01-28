@@ -4,7 +4,7 @@ import fs from "fs"
 import path from "path"
 import { TOKEN, CLIENT_ID, MYSQL, MONGO_URI } from "../config/config.json"
 import { Client, Collection, GatewayIntentBits, ModalSubmitInteraction, AutocompleteInteraction, REST, Routes } from "discord.js"
-import { error, info, warn } from "../utils/Utils"
+import { checkConfig, checkMongoCredentials, checkMysqlCredentials, error, info, warn } from "../utils/Utils"
 import { Command } from "../types"
 
 export default class Bot extends Client {
@@ -122,7 +122,11 @@ export default class Bot extends Client {
     }
 
     public async start() {
-        info("Starting bot...")
+        info("Starting the bot...")
+
+        if (!checkConfig()) {
+            process.exit(1);
+        }
 
         await this.loadEvents();
         await this.loadCommands();
@@ -130,7 +134,12 @@ export default class Bot extends Client {
         await this.login(TOKEN);
         await this.deploy();
 
-        await this.connectMySQL();
-        await this.connectMongoDB();
+        if (checkMongoCredentials()) {
+            await this.connectMongoDB();
+        }
+
+        if (checkMysqlCredentials()) {
+            await this.connectMySQL();
+        }
     }
 }

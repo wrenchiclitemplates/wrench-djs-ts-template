@@ -1,4 +1,35 @@
 import chalk from "chalk"
+import config from "../config/config.json"
+
+export const checkConfig = (): boolean => {
+    if (!config.TOKEN || config.TOKEN === "") {
+        error("Bot token not found/invalid. Please check config.json and try again.")
+        return false
+    }
+
+    if (!config.CLIENT_ID || isNaN(Number(config.CLIENT_ID)) || config.CLIENT_ID === "") {
+        error("Client ID is not found/invalid. Please check config.json and try again.")
+        return false
+    }
+}
+
+export const checkMysqlCredentials = (): boolean => {
+    if (!config.MYSQL.HOST || !config.MYSQL.USER || !config.MYSQL.PASSWORD || !config.MYSQL.DB_NAME) {
+        warn("No MySQL database credentials found in config.json, some features may not work")
+        return false
+    } else {
+        return true
+    }
+}
+
+export const checkMongoCredentials = (): boolean => {
+    if (!config.MONGO_URI || config.MONGO_URI === "") {
+        warn("No MongoDB URI found in config.json, some features may not work")
+        return false
+    } else {
+        return true
+    }
+}
 
 export const time = () => {
     let date = new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
