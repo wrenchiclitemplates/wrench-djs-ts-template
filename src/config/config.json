@@ -1,0 +1,11 @@
+{
+    "TOKEN": "",
+    "CLIENT_ID": "",
+    "MONGO_URI": "",
+    "MYSQL": {
+        "HOST": "",
+        "USER": "",
+        "PASSWORD": "",
+        "DB_NAME": ""
+    }
+}
